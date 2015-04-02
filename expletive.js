@@ -41,7 +41,7 @@ function expletive(config){
 	// determine root dir
 	if (!self.config.hasOwnProperty("root")) self.config.root = ".";
 	self.config.root = path.resolve(path.dirname(require.main.filename), self.config.root);
-	
+		
 	// create assets dirs if not existing
 	if (!fs.existsSync(path.resolve(self.config.root, 'assets'))) {
 		mkdirp.sync(path.resolve(self.config.root, 'assets/views'));
@@ -74,7 +74,7 @@ function expletive(config){
 	// receive multipart/form-data
 	if (self.config.hasOwnProperty("uploads") && (typeof self.config.uploads === "string") && (self.config.uploads !== "")) {
 		app.use(multer({
-			dest: path.resolve(__dirname, self.config.uploads),
+			dest: path.resolve(self.config.root, self.config.uploads),
 			limit: {
 				fileSize: (self.config.limit || Infinity)
 			},
@@ -122,7 +122,7 @@ function expletive(config){
 
 	// use mustache as view engine
 	app.engine("mustache", mustache());
-	app.set("views", path.resolve(__dirname, "assets/views"));
+	app.set("views", path.resolve(self.config.root, "assets/views"));
 	app.set("view engine", "mustache");
 	app.set("view cache", self.config.viewcache);
 	
