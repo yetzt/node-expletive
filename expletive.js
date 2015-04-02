@@ -149,8 +149,8 @@ function expletive(config){
 	// render injection
 	app.use(function(req, res, next){
 		// move render method and replace
-		req.__render = req.render;
-		req.render = function(name, data){
+		res.__render = res.render;
+		res.render = function(name, data){
 
 			// current locale
 			data.locale = req.locale;
@@ -168,7 +168,7 @@ function expletive(config){
 			if (req.hasOwnProperty("userdata")) data.user = req.userdata;
 			
 			// pass through
-			return req.__render(name, data);
+			return res.__render(name, data);
 		};
 		next();
 	});
