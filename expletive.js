@@ -101,7 +101,8 @@ function expletive(config){
 	// use csrf tokens
 	app.use(csrf({ cookie: { signed: true } }));
 	app.use(function(req, res, next) {
-		res.cookie('_csrfToken', req.csrfToken());
+		req._csrftoken = req.csrfToken();
+		res.cookie('_csrfToken', req._csrftoken);
 		next();
 	});
 	
@@ -163,6 +164,9 @@ function expletive(config){
 					name: config.locales[locale]
 				});
 			});
+
+			// add csrftoken
+			data.csrftoken = req._csrftoken
 
 			// add user data if available
 			if (req.hasOwnProperty("userdata")) data.user = req.userdata;
