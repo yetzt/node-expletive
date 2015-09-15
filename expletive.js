@@ -166,7 +166,7 @@ function expletive(config){
 			});
 
 			// add csrftoken
-			data.csrftoken = req._csrftoken
+			data.csrftoken = req._csrftoken;
 
 			// add user data if available
 			if (req.hasOwnProperty("userdata")) data.user = req.userdata;

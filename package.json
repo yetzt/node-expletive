@@ -1,6 +1,6 @@
 {
   "name": "expletive",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "express with some #$@%!",
   "main": "expletive.js",
   "repository": {
