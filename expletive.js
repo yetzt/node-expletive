@@ -38,6 +38,9 @@ function expletive(config){
 	// keep config
 	self.config = config;
 	
+	// check if i18n is enabled
+	self.config.useLocales = (self.config.hasOwnProperty("locales") && (self.config.locales instanceof Object));
+	
 	// determine root dir
 	if (!self.config.hasOwnProperty("root")) self.config.root = ".";
 	self.config.root = path.resolve(path.dirname(require.main.filename), self.config.root);
@@ -45,7 +48,7 @@ function expletive(config){
 	// create assets dirs if not existing
 	if (!fs.existsSync(path.resolve(self.config.root, 'assets'))) {
 		mkdirp.sync(path.resolve(self.config.root, 'assets/views'));
-		mkdirp.sync(path.resolve(self.config.root, 'assets/locales'));
+		if (self.config.useLocales) mkdirp.sync(path.resolve(self.config.root, 'assets/locales'));
 	};
 	
 	// check view cache
@@ -112,7 +115,7 @@ function expletive(config){
 	app.use('/assets', express.static(path.resolve(self.config.root, 'assets')));
 
 	// set up i18n
-	if (self.config.hasOwnProperty("locales") && (self.config.locales instanceof Object)) {
+	if (self.config.useLocales) {
 		var _locales = Object.keys(self.config.locales);
 		app.use(locale(_locales));
 		i18n.expressBind(app, {
@@ -130,7 +133,7 @@ function expletive(config){
 	app.set("view cache", self.config.viewcache);
 	
 	// internationalization request handler
-	app.use(function(req, res, next) {
+	if (self.config.useLocales) app.use(function(req, res, next) {
 		// set locale by accept-language-header, override on lang query and cookie
 		if (req && req.query && req.query.lang && config.locales.hasOwnProperty(req.query.lang)) {
 			req.i18n.setLocaleFromQuery(req);
