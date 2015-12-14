@@ -21,6 +21,7 @@ var app = expletive({
 		"de": "Deutsch", 
 		"en": "English"
 	},
+	csrf: true,                // csrf protection, default: true
 	viewcache: false,          // cache views, default: false
 	socket: "/path/to.sock",   // listen on socket
 	host: "localhost",         // listen on tcp

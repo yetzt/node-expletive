@@ -99,12 +99,14 @@ function expletive(config){
 	helmet(app);
 	
 	// use csrf tokens
-	app.use(csrf({ cookie: { signed: true } }));
-	app.use(function(req, res, next) {
-		req._csrftoken = req.csrfToken();
-		res.cookie('_csrfToken', req._csrftoken);
-		next();
-	});
+	if (!config.hasOwnProperty("csrf") || config.csrf !== false) {
+		app.use(csrf({ cookie: { signed: true } }));
+		app.use(function(req, res, next) {
+			req._csrftoken = req.csrfToken();
+			res.cookie('_csrfToken', req._csrftoken);
+			next();
+		});
+	}
 	
 	// serve static assets
 	app.use('/assets', express.static(path.resolve(self.config.root, 'assets')));
